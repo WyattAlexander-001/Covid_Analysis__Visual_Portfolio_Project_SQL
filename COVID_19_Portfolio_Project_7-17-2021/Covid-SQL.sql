@@ -46,11 +46,11 @@ order by 1,2
 
 --Looking at countries with HIGHEST infection rate compared to population, defaulted to alphabetical order
 
-Select location, MAX(total_cases) as Highest_Infection_Count, population, MAX((total_cases/population)) * 100 as Percent_of_Population_Infected 
+Select location, population, date, MAX(total_cases) as Highest_Infection_Count, population, MAX((total_cases/population)) * 100 as Percent_of_Population_Infected 
 From Covid_Project_Portfolio..['COVID_DEATHS_Table_7-17-2021$']
 --Where location like '%States%'
 --Where location like '%Philippines%'
-Group by Location, population
+Group by Location, population, date
 order by Percent_of_Population_Infected desc
 
 --Looking at countries with HIGHEST infection rate compared to population, now looking in desc order
@@ -73,6 +73,16 @@ order by Total_Death_Count desc
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 --Global Numbers
+
+Select location, SUM(cast(new_deaths as int)) as Total_Death_Count
+From Covid_Project_Portfolio..['COVID_DEATHS_Table_7-17-2021$']
+Where continent is null
+and location not in ('World', 'European Union', 'International')
+Group by location
+Order by Total_Death_Count desc
+
+--Location and TOTAL death counts
+
 Select date, SUM(new_cases) as Total_Cases, SUM(CAST(new_deaths as int)) as Total_Deaths, SUM(CAST(new_deaths as int))/SUM(new_cases) * 100 as Death_Percentage
 From Covid_Project_Portfolio..['COVID_DEATHS_Table_7-17-2021$']
 where continent is not null
@@ -108,6 +118,14 @@ Where dea.continent is not null
 order by 2,3
 
 --Rolling count of vaccinations
+
+
+
+
+
+
+
+
 
 
 
@@ -168,3 +186,4 @@ Where dea.continent is not null
 
 
 --Creating View to store data for later visualization
+
